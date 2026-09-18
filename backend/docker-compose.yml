@@ -1,0 +1,25 @@
+services:
+  api:
+    build: .
+    image: gridwise-api
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPTIMIZER_URL: http://optimizer:8000
+      OPTIMIZER_FALLBACK_ENABLED: 'true'
+    depends_on:
+      - optimizer
+    restart: unless-stopped
+
+  # Python optimizer service. Point build.context at wherever it lives.
+  optimizer:
+    build:
+      context: ../optimizer-service
+    image: gridwise-optimizer
+    ports:
+      - '8000:8000'
+    restart: unless-stopped
