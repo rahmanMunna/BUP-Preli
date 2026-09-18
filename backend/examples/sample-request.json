@@ -1,0 +1,34 @@
+{
+  "scenario_id": "bup-campus-day-1",
+  "operator_notes": [
+    "Maintenance crew washes the block B rooftop array from 1pm to 3pm, so expect roughly 20% less solar in those hours.",
+    "Keep at least 25 kWh in the battery after 9pm for the server room.",
+    "Do not draw more than 45 kWh from the grid during the evening peak.",
+    "The canteen is serving biryani today."
+  ],
+  "hours": [
+    { "hour": 8,  "demand_kwh": 32, "solar_kwh": 10, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 9,  "demand_kwh": 38, "solar_kwh": 22, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 10, "demand_kwh": 44, "solar_kwh": 34, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 11, "demand_kwh": 48, "solar_kwh": 41, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 12, "demand_kwh": 52, "solar_kwh": 46, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 13, "demand_kwh": 55, "solar_kwh": 45, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 14, "demand_kwh": 57, "solar_kwh": 40, "tariff_bdt_per_kwh": 6.2 },
+    { "hour": 15, "demand_kwh": 54, "solar_kwh": 31, "tariff_bdt_per_kwh": 8.9 },
+    { "hour": 16, "demand_kwh": 50, "solar_kwh": 18, "tariff_bdt_per_kwh": 8.9 },
+    { "hour": 17, "demand_kwh": 58, "solar_kwh": 6,  "tariff_bdt_per_kwh": 8.9 },
+    { "hour": 18, "demand_kwh": 66, "solar_kwh": 0,  "tariff_bdt_per_kwh": 14.2 },
+    { "hour": 19, "demand_kwh": 71, "solar_kwh": 0,  "tariff_bdt_per_kwh": 14.2 },
+    { "hour": 20, "demand_kwh": 64, "solar_kwh": 0,  "tariff_bdt_per_kwh": 14.2 },
+    { "hour": 21, "demand_kwh": 49, "solar_kwh": 0,  "tariff_bdt_per_kwh": 8.9 },
+    { "hour": 22, "demand_kwh": 37, "solar_kwh": 0,  "tariff_bdt_per_kwh": 6.2 }
+  ],
+  "battery": {
+    "capacity_kwh": 120,
+    "initial_soc_kwh": 60,
+    "max_charge_kwh": 30,
+    "max_discharge_kwh": 30,
+    "efficiency": 0.95,
+    "min_reserve_kwh": 10
+  }
+}
