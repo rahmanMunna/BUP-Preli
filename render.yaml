@@ -1,0 +1,71 @@
+# Render Blueprint — deploys the GridWise API and the Python optimizer as two
+# Docker web services. Point Render at this file (New > Blueprint) and it
+# creates both.
+#
+# The free instance type has no private networking, so the API reaches the
+# optimizer over its public HTTPS URL. OPTIMIZER_URL is therefore left unset
+# here (sync: false) and filled in from the dashboard once the optimizer has
+# its address — see DEPLOY.md.
+services:
+  # ---------- Python optimizer (FastAPI + OR-Tools) ----------
+  - type: web
+    name: gridwise-optimizer
+    runtime: docker
+    rootDir: optimizer-service
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+
+  # ---------- NestJS API ----------
+  - type: web
+    name: gridwise-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 3000
+
+      # Secrets: set these in the Render dashboard, never in this file.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+      # Paste the optimizer's public URL here after its first deploy,
+      # e.g. https://gridwise-optimizer.onrender.com
+      - key: OPTIMIZER_URL
+        sync: false
+
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: OPENROUTER_MODEL
+        value: google/gemini-3.6-flash
+      - key: LLM_PROVIDER_ORDER
+        value: gemini,openrouter
+      - key: LLM_MAX_OUTPUT_TOKENS
+        value: 4096
+
+      - key: OPTIMIZER_PATH
+        value: /solve
+      # A free-tier optimizer that has spun down needs ~50s to wake, well past
+      # the 20s local default, so allow a full cold start before giving up.
+      - key: OPTIMIZER_TIMEOUT_MS
+        value: 60000
+      - key: OPTIMIZER_MAX_RETRIES
+        value: 2
+      # Keep the built-in heuristic as a safety net: a cold or failed optimizer
+      # then degrades to a worse plan instead of a 503.
+      - key: OPTIMIZER_FALLBACK_ENABLED
+        value: true
